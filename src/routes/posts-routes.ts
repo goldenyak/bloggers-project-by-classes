@@ -115,18 +115,18 @@ postsRouter.get('/:postId/comments',
         return
     })
 
-postsRouter.put('/:postId/like-status',
-    authMiddleware,
-    body('likeStatus').isIn(['Like', 'Dislike', 'None']),
-    inputValidation,
-    async (req: Request, res: Response) => {
-        const {likeStatus} = req.body
-
-        if (req.user) {
-            await postsServices.setLikeStatus(req.params.postId, likeStatus, req.user)
-            res.sendStatus(204)
-            return
-        }
-        res.sendStatus(401)
-        return
-    })
+// postsRouter.put('/:postId/like-status',
+//     authMiddleware,
+//     body('likeStatus').isIn(['Like', 'Dislike', 'None']),
+//     inputValidation,
+//     async (req: Request, res: Response) => {
+//         const {likeStatus} = req.body
+//
+//         if (req.user) {
+//             await postsServices.setLikeStatus(req.params.postId, likeStatus, req.user)
+//             res.sendStatus(204)
+//             return
+//         }
+//         res.sendStatus(401)
+//         return
+//     })

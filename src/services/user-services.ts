@@ -5,8 +5,9 @@ import {v4 as uuidv4} from "uuid";
 import add from "date-fns/add";
 import {authServices} from "./auth-services";
 import {requestBundler} from "../db/ip-adapter";
+import {User} from "../types/user-type";
 
-export const userServices = {
+class UserServices {
     async getAllUsers(pageNumber: number, pageSize: number) {
         const userCount = await usersRepository.countUsers({})
         const pagesCount = Math.ceil(userCount / pageSize)
@@ -19,38 +20,39 @@ export const userServices = {
             "totalCount": userCount,
             "items": allUsers
         }
-    },
+    }
 
     async createNewUser(login: string, password: string, email: string) {
         const hashPassword = await authServices.hashPassword(password)
-        const newUser = await usersRepository.createNewUser({
-            _id: new ObjectId(),
-            accountData: {
+        const user: User = new User(
+            new ObjectId(),
+            {
                 userName: login,
                 password: hashPassword,
                 email: email,
                 createdAt: new Date()
             },
-            emailConfirmation: {
+            {
                 confirmationCode: uuidv4().toString(),
                 expirationDate: add(new Date(), {
                     hours: 1,
                     minutes: 3
                 }),
                 isConfirmed: false
-            }
-        })
-        if (newUser.insertedId) {
+            })
+
+        await usersRepository.createNewUser(user)
+        if (user) {
             return {
-                "id": newUser.insertedId.toString(),
-                "login": login
+                id: user._id,
+                login: user.accountData.userName
             }
         } else return null
-    },
+    }
 
     async getUserByLogin(login: string) {
         return await usersRepository.getUserByLogin(login)
-    },
+    }
 
     async getUserById(id: string) {
         try {
@@ -58,11 +60,11 @@ export const userServices = {
         } catch (error) {
             return null
         }
-    },
+    }
 
     async getUserByEmail(email: string) {
-            return await usersRepository.getUserByEmail(email)
-    },
+        return await usersRepository.getUserByEmail(email)
+    }
 
     async getUserByConfirmationCode(code: string) {
         try {
@@ -70,30 +72,32 @@ export const userServices = {
         } catch (error) {
             return null
         }
-    },
+    }
 
     async deleteUserById(id: string) {
         return await usersRepository.deleteUserById(new ObjectId(id))
-    },
+    }
 
-    updateUserConfirmationCode: async (email:string) => {
+    async updateUserConfirmationCode(email: string) {
         const code = uuidv4().toString()
         await usersRepository.updateConfirmationCode(email, code)
         return code
-    },
+    }
 
-    logRequest: (requestName: string, ip: string, time: Date) => {
+    logRequest(requestName: string, ip: string, time: Date) {
         const newLog = {
             requestName: requestName,
             ip: ip,
             time: time
         }
         requestBundler.push(newLog)
-    },
+    }
 
-    getRequests: (requestName: string, ip: string, time: Date) => {
+    getRequests(requestName: string, ip: string, time: Date) {
         return requestBundler.filter(request =>
             request.requestName === requestName && request.ip === ip && request.time > time
         )
     }
 }
+
+export const userServices = new UserServices()
