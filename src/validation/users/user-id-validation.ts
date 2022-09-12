@@ -1,5 +1,8 @@
 import {Request, Response, NextFunction} from "express";
-import {userServices} from "../../services/user-services";
+import {container} from "../../composition-root";
+import {UserServices} from "../../services/user-services";
+
+const userServices = container.resolve(UserServices);
 
 export const userIdValidation = async (req: Request, res: Response, next:NextFunction) => {
     const userId = req.params.id || null

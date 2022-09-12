@@ -1,8 +1,11 @@
+import "reflect-metadata";
 import {usersCollection} from "../db/db";
 import {ObjectId} from "mongodb";
 import {User} from "../types/user-type";
+import {injectable} from "inversify";
 
-class UsersRepository {
+@injectable()
+export class UsersRepository {
     async getAllUsers(pageNumber: number, pageSize: number) {
 
         const users = await usersCollection.find({}, {
@@ -58,5 +61,3 @@ class UsersRepository {
         return await usersCollection.countDocuments(filter)
     }
 }
-
-export const usersRepository = new UsersRepository();

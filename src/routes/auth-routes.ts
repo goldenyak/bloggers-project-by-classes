@@ -1,16 +1,21 @@
 import {Request, Response, Router} from "express";
-import {userServices} from "../services/user-services";
+// import {userServices} from "../services/user-services";
 import {inputValidation} from "../validation/errors/input-validation";
 import {authServices} from "../services/auth-services";
 import {body, validationResult} from "express-validator";
-import {usersRepository} from "../repositories/users-repository";
+// import {usersRepository} from "../repositories/users-repository";
 import {userLoginValidation} from "../validation/users/user-login-validation";
 import {userEmailValidation} from "../validation/users/user-email-validation";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {errorsAdapt} from "../utils";
 import {checkRefreshToken} from "../middlewares/check-refresh-token";
 import {isNotSpam} from "../middlewares/check-ip-middleware";
+import {container} from "../composition-root";
+import {UserServices} from "../services/user-services";
+import {UsersRepository} from "../repositories/users-repository";
 
+const userServices = container.resolve(UserServices);
+const userRepository = container.resolve(UsersRepository)
 
 export const authRouter = Router({});
 
@@ -125,7 +130,7 @@ authRouter.get('/me',
 authRouter.post('/registration-confirmation',
     isNotSpam('confirm', 10, 5),
     body('code').custom(async value => {
-        const user = await usersRepository.getUserByConfirmationCode(value)
+        const user = await userRepository.getUserByConfirmationCode(value)
         if (!user || user.emailConfirmation.isConfirmed) {
             return Promise.reject();
         }
@@ -137,7 +142,7 @@ authRouter.post('/registration-confirmation',
             res.status(400).json({"errorsMessages": errorsAdapt(errors.array({onlyFirstError: true}))})
             return
         }
-        await usersRepository.confirmUser(req.body.code)
+        await userRepository.confirmUser(req.body.code)
         res.sendStatus(204)
     });
 

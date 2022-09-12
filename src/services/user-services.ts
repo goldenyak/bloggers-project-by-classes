@@ -1,4 +1,5 @@
-import {usersRepository} from "../repositories/users-repository";
+import "reflect-metadata";
+import {UsersRepository} from "../repositories/users-repository";
 import bcrypt from "bcrypt";
 import {ObjectId} from "mongodb";
 import {v4 as uuidv4} from "uuid";
@@ -6,12 +7,16 @@ import add from "date-fns/add";
 import {authServices} from "./auth-services";
 import {requestBundler} from "../db/ip-adapter";
 import {User} from "../types/user-type";
+import {injectable} from "inversify";
 
-class UserServices {
+@injectable()
+export class UserServices {
+    constructor(protected userRepository: UsersRepository) {}
+
     async getAllUsers(pageNumber: number, pageSize: number) {
-        const userCount = await usersRepository.countUsers({})
+        const userCount = await this.userRepository.countUsers({})
         const pagesCount = Math.ceil(userCount / pageSize)
-        const allUsers = await usersRepository.getAllUsers(pageNumber, pageSize)
+        const allUsers = await this.userRepository.getAllUsers(pageNumber, pageSize)
 
         return {
             "pagesCount": pagesCount,
@@ -41,7 +46,7 @@ class UserServices {
                 isConfirmed: false
             })
 
-        await usersRepository.createNewUser(user)
+        await this.userRepository.createNewUser(user)
         if (user) {
             return {
                 id: user._id,
@@ -51,36 +56,36 @@ class UserServices {
     }
 
     async getUserByLogin(login: string) {
-        return await usersRepository.getUserByLogin(login)
+        return await this.userRepository.getUserByLogin(login)
     }
 
     async getUserById(id: string) {
         try {
-            return await usersRepository.getUserById(new ObjectId(id))
+            return await this.userRepository.getUserById(new ObjectId(id))
         } catch (error) {
             return null
         }
     }
 
     async getUserByEmail(email: string) {
-        return await usersRepository.getUserByEmail(email)
+        return await this.userRepository.getUserByEmail(email)
     }
 
     async getUserByConfirmationCode(code: string) {
         try {
-            return await usersRepository.getUserByConfirmationCode(code)
+            return await this.userRepository.getUserByConfirmationCode(code)
         } catch (error) {
             return null
         }
     }
 
     async deleteUserById(id: string) {
-        return await usersRepository.deleteUserById(new ObjectId(id))
+        return await this.userRepository.deleteUserById(new ObjectId(id))
     }
 
     async updateUserConfirmationCode(email: string) {
         const code = uuidv4().toString()
-        await usersRepository.updateConfirmationCode(email, code)
+        await this.userRepository.updateConfirmationCode(email, code)
         return code
     }
 
@@ -99,5 +104,3 @@ class UserServices {
         )
     }
 }
-
-export const userServices = new UserServices()

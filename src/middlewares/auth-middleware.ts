@@ -1,12 +1,13 @@
 import {NextFunction, Request, Response} from "express";
 import {authServices} from "../services/auth-services";
-import {userServices} from "../services/user-services";
-import sub from "date-fns/sub"
+import {container} from "../composition-root";
+import {UserServices} from "../services/user-services";
+
+const userServices = container.resolve(UserServices);
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.headers.authorization) return res.sendStatus(401)
 
-    // const authType: string | undefined = req.headers.authorization?.split(" ")[0].toString() || undefined
     const authType = req.headers.authorization.split(" ")[0].toString()
     const authPhrase: string = req.headers.authorization.split(" ")[1].toString()
 
@@ -30,5 +31,4 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         }
         return res.sendStatus(401)
     }
-
 }

@@ -1,13 +1,17 @@
 import jwt from "jsonwebtoken";
-import {usersRepository} from "../repositories/users-repository";
-import {userServices} from "./user-services";
+// import {usersRepository} from "../repositories/users-repository";
 import bcrypt from "bcrypt";
 import {emailAdapter} from "../adapters/emailAdapter";
 import {ObjectId} from "mongodb";
 import add from "date-fns/add";
 import {tokensRepository} from "../repositories/tokens-repository";
 import {RefreshTokensType} from "../types/refresh-tokens-type";
+import {container} from "../composition-root";
+import {UserServices} from "./user-services";
+import {UsersRepository} from "../repositories/users-repository";
 
+const userServices = container.resolve(UserServices);
+const userRepository = container.resolve(UsersRepository)
 
 export const authServices = {
 
@@ -73,7 +77,7 @@ export const authServices = {
     },
 
     async createToken(login: string) {
-        const findUser = await usersRepository.getUserByLogin(login)
+        const findUser = await userRepository.getUserByLogin(login)
         if (findUser) {
             const token = jwt.sign({userId: findUser._id}, "fhdgsmmbxssnxmsnxa", {expiresIn: "30d"})
             return token
@@ -81,7 +85,7 @@ export const authServices = {
     },
 
     async createRefreshToken(login: string) {
-        const findUser = await usersRepository.getUserByLogin(login)
+        const findUser = await userRepository.getUserByLogin(login)
         if (findUser) {
             const refreshToken = jwt.sign({userId: findUser._id}, "hgghdgfhd", {expiresIn: "30d"})
 

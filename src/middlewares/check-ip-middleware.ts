@@ -1,6 +1,9 @@
 import {NextFunction, Request, Response} from "express";
-import {userServices} from "../services/user-services";
 import sub from "date-fns/sub";
+import {container} from "../composition-root";
+import {UserServices} from "../services/user-services";
+
+const userServices = container.resolve(UserServices);
 
 export const isNotSpam = (requestName: string, timeLimit: number = 10, attemptsLimit: number = 5) => {
     return (req: Request, res: Response, next: NextFunction) => {
