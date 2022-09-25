@@ -11,7 +11,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     const authType = req.headers.authorization.split(" ")[0].toString()
     const authPhrase: string = req.headers.authorization.split(" ")[1].toString()
 
-    //Basic auth
+    //Basic auth auth
     if (authType === 'Basic') {
         if (authPhrase === 'YWRtaW46cXdlcnR5') {
             next()
