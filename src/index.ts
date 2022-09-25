@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
-app.use('/bloggers', bloggersRouter);
+app.use('/blogs', bloggersRouter);
 app.use('/posts', postsRouter);
 app.use('/comments', commentsRouter);
 app.use('/email', emailRouter)

@@ -10,9 +10,9 @@ import {titleValidation} from "../validation/posts/title-validation";
 import {shortDescriptionValidation} from "../validation/posts/short-description-validation";
 import {contentValidation} from "../validation/posts/content-validation";
 
-export const bloggersRouter = Router({})
+export const blogsRouter = Router({})
 
-bloggersRouter.get('/',
+blogsRouter.get('/',
     query('PageNumber').isInt().optional({checkFalsy: true}),
     query('PageSize').isInt().optional({checkFalsy: true}),
     inputValidation,
@@ -26,13 +26,13 @@ bloggersRouter.get('/',
         res.status(200).send(bloggers)
         return;
     });
-bloggersRouter.get('/:id',
+blogsRouter.get('/:id',
     bloggerIdValidation,
     async (req: Request, res: Response) => {
         res.status(200).send(await bloggerServices.getBloggerById(req.params.id))
         return
 })
-bloggersRouter.post('/',
+blogsRouter.post('/',
     authMiddleware,
     bloggerNameValidation,
     youtubeUrlValidation,
@@ -45,7 +45,7 @@ bloggersRouter.post('/',
         return
     })
 
-bloggersRouter.put('/:id', authMiddleware, bloggerIdValidation, youtubeUrlValidation, bloggerNameValidation, inputValidation, async (req: Request, res: Response) => {
+blogsRouter.put('/:id', authMiddleware, bloggerIdValidation, youtubeUrlValidation, bloggerNameValidation, inputValidation, async (req: Request, res: Response) => {
     const {name, youtubeUrl} = req.body
     const {id} = req.params
 
@@ -53,12 +53,12 @@ bloggersRouter.put('/:id', authMiddleware, bloggerIdValidation, youtubeUrlValida
     updatedBlogger && res.sendStatus(204)
     return;
 })
-bloggersRouter.delete('/:id', authMiddleware, bloggerIdValidation, async (req: Request, res: Response) => {
+blogsRouter.delete('/:id', authMiddleware, bloggerIdValidation, async (req: Request, res: Response) => {
     await bloggerServices.deleteBloggerById(req.params.id)
     res.sendStatus(204)
     return;
 })
-bloggersRouter.get('/:bloggerId/posts',
+blogsRouter.get('/:bloggerId/posts',
     bloggerIdValidation,
     param('bloggerId').isInt(),
     query('PageNumber').isInt().optional({checkFalsy: true}),
@@ -71,7 +71,7 @@ bloggersRouter.get('/:bloggerId/posts',
         return
     })
 
-bloggersRouter.post('/:bloggerId/posts',
+blogsRouter.post('/:bloggerId/posts',
     authMiddleware,
     bloggerIdValidation,
     titleValidation,
