@@ -2,7 +2,7 @@ import express, {Request, Response} from "express";
 import cors from 'cors';
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import {bloggersRouter} from "./routes/bloggers-routes";
+import {blogsRouter} from "./routes/bloggers-routes";
 import {postsRouter} from "./routes/posts-routes";
 import {runDb} from "./db/db";
 import {authRouter} from "./routes/auth-routes";
@@ -24,7 +24,7 @@ app.use(cookieParser());
 
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
-app.use('/blogs', bloggersRouter);
+app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);
 app.use('/comments', commentsRouter);
 app.use('/email', emailRouter)
