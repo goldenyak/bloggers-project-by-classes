@@ -1,7 +1,5 @@
 import "reflect-metadata";
 import {Router} from "express";
-// import {userController} from "../composition-root";
-import {UserServices} from "../services/user-services";
 import {body} from "express-validator";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {inputValidation} from "../validation/errors/input-validation";

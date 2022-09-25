@@ -13,9 +13,15 @@ import {isNotSpam} from "../middlewares/check-ip-middleware";
 import {container} from "../composition-root";
 import {UserServices} from "../services/user-services";
 import {UsersRepository} from "../repositories/users-repository";
+import {AuthController} from "../controllers/auth-controller";
 
 const userServices = container.resolve(UserServices);
 const userRepository = container.resolve(UsersRepository)
+const authController = container.resolve(AuthController)
+
+const registerUser = authController.registerUser.bind(authController)
+const loginUser = authController.loginUser.bind(authController)
+
 
 export const authRouter = Router({});
 
@@ -24,71 +30,25 @@ authRouter.post('/registration',
     body('login').isLength({min: 3, max: 10}),
     body('password').isLength({min: 6, max: 20}),
     body('email').normalizeEmail().isEmail(),
-    // body('email').custom(async value => {
-    //     if (await userServices.getUserByEmail(value)) {
-    //         return Promise.reject();
-    //     }
-    // }),
-    // body('login').custom(async value => {
-    //     if (await userServices.getUserByLogin(value)) {
-    //         return Promise.reject();
-    //     }
-    // }),
-    inputValidation,
-    async (req: Request, res: Response) => {
-        const {login, password, email} = req.body
-        // const errors = validationResult(req)
-        // if (!errors.isEmpty()) {
-        //     res.status(400).json({"errorsMessages": errorsAdapt(errors.array({onlyFirstError: true}))})
-        //     return
-        // }
-        const createdUser = await authServices.registerUser(login, password, email)
-        if (createdUser) {
-            res.sendStatus(204)
-        } else {
-            res.sendStatus(400)
+    body('email').custom(async value => {
+        if (await userServices.getUserByEmail(value)) {
+            return Promise.reject();
         }
-    }
-);
+    }),
+    body('login').custom(async value => {
+        if (await userServices.getUserByLogin(value)) {
+            return Promise.reject();
+        }
+    }),
+    inputValidation,
+    registerUser )
 
 authRouter.post('/login',
     isNotSpam('login', 10, 5),
     body('login').exists().isString(),
     body('password').exists().isString(),
-    async (req: Request, res: Response) => {
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
-            res.status(400).json({"errorsMessages": errorsAdapt(errors.array({onlyFirstError: true}))})
-            return
-        }
-
-        try {
-            const {login, password} = req.body
-            const findUser = await userServices.getUserByLogin(login)
-            if (!findUser) {
-                res.status(401).json("Invalid name")
-                return
-            }
-            const isPasswordCorrect = await authServices.checkPassword(password, findUser.accountData.password)
-            if (!isPasswordCorrect) {
-                res.status(401).json("Invalid password")
-                return
-            }
-
-            const accessToken = await authServices.createToken(login);
-            const refreshToken = await authServices.createRefreshToken(login)
-            return res.cookie('refreshToken', refreshToken,
-                {
-                     httpOnly: true,
-                    secure: true
-                }
-            )
-                .status(200).send({accessToken})
-
-        } catch (error) {
-            console.error(error)
-        }
-    });
+    loginUser
+    );
 
 authRouter.post('/refresh-token',
     checkRefreshToken,
