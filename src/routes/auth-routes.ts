@@ -30,11 +30,11 @@ authRouter.post('/registration',
     body('login').isLength({min: 3, max: 10}),
     body('password').isLength({min: 6, max: 20}),
     body('email').normalizeEmail().isEmail(),
-    body('email').custom(async value => {
-        if (await userServices.getUserByEmail(value)) {
-            return Promise.reject();
-        }
-    }),
+    // body('email').custom(async value => {
+    //     if (await userServices.getUserByEmail(value)) {
+    //         return Promise.reject();
+    //     }
+    // }),
     body('login').custom(async value => {
         if (await userServices.getUserByLogin(value)) {
             return Promise.reject();

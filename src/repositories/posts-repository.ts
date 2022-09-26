@@ -28,8 +28,8 @@ export const postsRepository = {
                 "title": newPost.title,
                 "shortDescription": newPost.shortDescription,
                 "content": newPost.content,
-                "bloggerId": newPost.bloggerId,
-                "bloggerName": newPost.bloggerName
+                "blogId": newPost.blogId,
+                "blogName": newPost.blogName
             }
         } catch (error) {
             console.error(error)
@@ -44,8 +44,8 @@ export const postsRepository = {
                 title: title,
                 shortDescription: shortDescription,
                 content: content,
-                bloggerId: bloggerId,
-                bloggerName: bloggerName
+                blogId: bloggerId,
+                blogName: bloggerName
             }
         })
         return updatedPost;

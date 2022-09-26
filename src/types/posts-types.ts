@@ -16,7 +16,7 @@ export type postsType = {
     "title": string,
     "shortDescription": string,
     "content": string,
-    "bloggerId": string,
-    "bloggerName": string,
+    "blogId": string,
+    "blogName": string,
     "addedAt": Date,
 }

@@ -1,6 +1,6 @@
 import {ObjectId} from "mongodb";
 
-export type bloggersType = {
+export type blogsType = {
     "_id": ObjectId,
     "id": string,
     "name": string,

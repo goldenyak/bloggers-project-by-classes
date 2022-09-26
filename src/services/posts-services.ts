@@ -1,4 +1,4 @@
-import {bloggersRepository} from "../repositories/bloggers-repository";
+import {blogsRepository} from "../repositories/blogs-repository";
 import {postsRepository} from "../repositories/posts-repository";
 import {ObjectId} from "mongodb";
 import {likesRepository} from "../repositories/likes-repository";
@@ -20,16 +20,16 @@ export const postsServices = {
         return await postsRepository.getPostById(id)
     },
 
-    async createNewPost(title: string, shortDescription: string, content: string, bloggerId: string) {
-        const blogger = await bloggersRepository.getBloggerById(bloggerId)
+    async createNewPost(title: string, shortDescription: string, content: string, blogId: string) {
+        const blog = await blogsRepository.getBlogById(blogId)
         const newPost = {
             "_id": new ObjectId(),
             "id": Number(new Date()).toString(),
             "title": title,
             "shortDescription": shortDescription,
             "content": content,
-            "bloggerId": bloggerId,
-            "bloggerName": blogger?.name || '',
+            "blogId": blogId,
+            "blogName": blog?.name || '',
             "addedAt": new Date(),
         }
 
@@ -37,8 +37,8 @@ export const postsServices = {
     },
 
     async updatePostById(id: string, title: string, shortDescription: string, content: string, bloggerId: string) {
-        const bloggerById = await bloggersRepository.getBloggerById(bloggerId)
-        bloggerById?.name && await postsRepository.updatePostById(id, title, shortDescription, content, bloggerId, bloggerById?.name)
+        const blogById = await blogsRepository.getBlogById(bloggerId)
+        blogById?.name && await postsRepository.updatePostById(id, title, shortDescription, content, bloggerId, blogById?.name)
         return
     },
 

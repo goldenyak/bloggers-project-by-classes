@@ -1,7 +1,7 @@
 import {Request, Response, Router} from 'express'
 import {postIdValidation} from "../validation/posts/post-id-validation";
-import {body, param, query, validationResult} from "express-validator";
-import {bloggersRepository} from "../repositories/bloggers-repository";
+import {body, param, query} from "express-validator";
+import {blogsRepository} from "../repositories/blogs-repository";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {titleValidation} from "../validation/posts/title-validation";
 import {
@@ -44,8 +44,8 @@ postsRouter.post('/',
     titleValidation,
     shortDescriptionValidation,
     contentValidation,
-    body('bloggerId').custom(async value => {
-        if (!await bloggersRepository.getBloggerById(value)) {
+    body('blogId').custom(async value => {
+        if (!await blogsRepository.getBlogById(value)) {
             return Promise.reject();
         }
     }),
@@ -79,8 +79,8 @@ postsRouter.put('/:id',
     titleValidation,
     shortDescriptionValidation,
     contentValidation,
-    body('bloggerId').custom(async value => {
-        if (!await bloggersRepository.getBloggerById(value)) {
+    body('blogId').custom(async value => {
+        if (!await blogsRepository.getBlogById(value)) {
             return Promise.reject();
         }
     }),

@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {postsCollection} from "../../db/db";
 import {postsServices} from "../../services/posts-services";
-import {bloggersRepository} from "../../repositories/bloggers-repository";
+import {blogsRepository} from "../../repositories/blogs-repository";
 import {postsRepository} from "../../repositories/posts-repository";
 
 
