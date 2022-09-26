@@ -114,6 +114,9 @@ authRouter.post('/registration-email-resending',
         if (!user ) {
             return Promise.reject();
         }
+        if( user && user.emailConfirmation.isConfirmed) {
+            return Promise.reject();
+        }
     }),
     async (req: Request, res: Response) => {
         const errors = validationResult(req)
