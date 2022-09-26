@@ -111,7 +111,7 @@ authRouter.post('/registration-email-resending',
     body('email').normalizeEmail().isEmail(),
     body('email').custom(async value => {
         const user = await userServices.getUserByEmail(value)
-        if (user === null || (user && user.emailConfirmation.isConfirmed)) {
+        if (!user ) {
             return Promise.reject();
         }
     }),
@@ -121,6 +121,8 @@ authRouter.post('/registration-email-resending',
             res.status(400).json({"errorsMessages": errorsAdapt(errors.array({onlyFirstError: true}))})
             return
         }
+        const user = await userServices.getUserByEmail(req.body.email)
+        console.log(user)
         await authServices.updateConfirmationCode(req.body.email)
         res.sendStatus(204)
     });
