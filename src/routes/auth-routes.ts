@@ -114,7 +114,7 @@ authRouter.post('/registration-email-resending',
         if (!user ) {
             return Promise.reject();
         }
-        if( user && user.emailConfirmation.isConfirmed) {
+        if(user.emailConfirmation.isConfirmed) {
             return Promise.reject();
         }
     }),
