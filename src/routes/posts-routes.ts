@@ -105,13 +105,14 @@ postsRouter.delete('/:id',
 postsRouter.get('/:postId/comments',
     postIdValidation,
     inputValidation,
-    query('PageNumber').isInt().optional({checkFalsy: true}),
-    query('PageSize').isInt().optional({checkFalsy: true}),
+    query('pageNumber').isInt().optional({checkFalsy: true}),
+    query('pageSize').isInt().optional({checkFalsy: true}),
     async (req: Request, res: Response) => {
-        const pageNumber = req.query.PageNumber ? Number(req.query.PageNumber) : 1
-        const pageSize = req.query.PageSize ? Number(req.query.PageSize) : 10
+        const pageNumber = req.query.pageNumber ? Number(req.query.pageNumber) : 1
+        const pageSize = req.query.pageSize ? Number(req.query.pageSize) : 10
+        const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
 
-        res.status(200).send(await commentsServices.getCommentsByPostId(req.params.postId, pageNumber, pageSize))
+        res.status(200).send(await commentsServices.getCommentsByPostId(req.params.postId, pageNumber, pageSize, sortBy))
         return
     })
 

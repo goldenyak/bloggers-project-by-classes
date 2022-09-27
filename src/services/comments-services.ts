@@ -11,10 +11,10 @@ export const commentsServices = {
         return await commentsRepository.getCommentById(id)
     },
 
-    async getCommentsByPostId(postId: string, pageNumber: number, pageSize: number) {
+    async getCommentsByPostId(postId: string, pageNumber: number, pageSize: number, sortBy: string) {
         const commentCount = await commentsRepository.countComments(postId)
         const pagesCount = Math.ceil(commentCount / pageSize)
-        const commentsByPostId = await commentsRepository.getCommentsByPostId(postId, pageNumber, pageSize)
+        const commentsByPostId = await commentsRepository.getCommentsByPostId(postId, pageNumber, pageSize, sortBy)
 
         return {
             "pagesCount": pagesCount,

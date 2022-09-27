@@ -8,10 +8,12 @@ export const commentsRepository = {
         // return await commentsCollection.insertOne(newComment)
     },
 
-    async getCommentsByPostId(postId: string, pageNumber: number, pageSize: number) {
+    async getCommentsByPostId(postId: string, pageNumber: number, pageSize: number, sortBy: string) {
+        console.log(sortBy)
         return await commentsCollection.find({postId: postId})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
+            .sort(sortBy)
             .map(comment => {
                 return {
                     id: comment.id,
