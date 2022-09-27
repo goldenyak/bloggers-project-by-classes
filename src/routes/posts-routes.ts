@@ -51,8 +51,8 @@ postsRouter.post('/',
     }),
     inputValidation,
     async (req: Request, res: Response) => {
-        const {title, shortDescription, content, bloggerId} = req.body
-        res.status(201).send(await postsServices.createNewPost(title, shortDescription, content, bloggerId))
+        const {title, shortDescription, content, blogId} = req.body
+        res.status(201).send(await postsServices.createNewPost(title, shortDescription, content, blogId))
         return;
     })
 
