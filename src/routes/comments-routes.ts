@@ -50,10 +50,8 @@ commentsRouter.delete('/:commentId',
     authMiddleware,
     async (req: Request, res: Response) => {
         const isCommentById = await commentsServices.getCommentById(req.params.commentId)
-
         if (isCommentById) {
-            const currentUserId = req.user!._id.toString()
-            // @ts-ignore
+            const currentUserId = req.user._id.toString()
             if (currentUserId === isCommentById.userId) {
                 await commentsServices.deleteComment(req.params.commentId)
                 res.sendStatus(204)

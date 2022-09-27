@@ -5,6 +5,7 @@ import {commentsType} from "../types/comments-type";
 export const commentsRepository = {
     async createComment(newComment: commentsType) {
         return await commentsCollection.insertOne({...newComment})
+        // return await commentsCollection.insertOne(newComment)
     },
 
     async getCommentsByPostId(postId: string, pageNumber: number, pageSize: number) {
@@ -32,8 +33,8 @@ export const commentsRepository = {
         return await commentsCollection.countDocuments({postId: postId})
     },
 
-    async deleteComment(commentId: ObjectId) {
-        return await commentsCollection.deleteOne({_id: commentId})
+    async deleteComment(commentId: string) {
+        return await commentsCollection.deleteOne({id: commentId})
     },
 
     async updateCommentById(id: ObjectId, content: string) {

@@ -32,7 +32,7 @@ export const commentsServices = {
             userId: user._id.toString(),
             userLogin: user.accountData.userName,
             createdAt: new Date(),
-            // postId: postId,
+            postId: postId,
             // type: "comment"
         }
         await commentsRepository.createComment(newComment)
@@ -44,7 +44,7 @@ export const commentsServices = {
     },
 
     async deleteComment(commentId: string) {
-        return await commentsRepository.deleteComment(new ObjectId(commentId))
+        return await commentsRepository.deleteComment(commentId)
     },
 
     async setLikeStatus(commentId: string, likeStatus: string, user: User) {

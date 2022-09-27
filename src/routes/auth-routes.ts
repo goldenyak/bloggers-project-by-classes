@@ -125,7 +125,6 @@ authRouter.post('/registration-email-resending',
             return
         }
         const user = await userServices.getUserByEmail(req.body.email)
-        console.log(user)
         await authServices.updateConfirmationCode(req.body.email)
         res.sendStatus(204)
     });
