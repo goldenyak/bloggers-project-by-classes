@@ -3,7 +3,7 @@ export type commentsType = {
     "content": string,
     "userId": string,
     "userLogin": string,
-    "addedAt": Date,
-    "postId": string,
-    "type": string
+    "createdAt": Date,
+    // "postId": string,
+    // "type": string
 }

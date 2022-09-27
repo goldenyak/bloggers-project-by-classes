@@ -17,7 +17,7 @@ export const commentsRepository = {
                     content: comment.content,
                     userId: comment.userId,
                     userLogin: comment.userLogin,
-                    addedAt: comment.addedAt
+                    createdAt: comment.createdAt
                 }
             })
             .toArray()

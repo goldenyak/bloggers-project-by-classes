@@ -31,9 +31,9 @@ export const commentsServices = {
             content: content,
             userId: user._id.toString(),
             userLogin: user.accountData.userName,
-            addedAt: new Date(),
-            postId: postId,
-            type: "comment"
+            createdAt: new Date(),
+            // postId: postId,
+            // type: "comment"
         }
         await commentsRepository.createComment(newComment)
         return newComment
