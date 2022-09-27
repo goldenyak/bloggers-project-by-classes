@@ -36,7 +36,15 @@ export const commentsServices = {
             // type: "comment"
         }
         await commentsRepository.createComment(newComment)
-        return newComment
+        if(newComment) {
+            return {
+                id: newComment.id,
+                content: newComment.content,
+                userId: newComment.userId,
+                userLogin: newComment.userLogin,
+                createdAt: newComment.createdAt,
+            }
+        }
     },
 
     async updateCommentById(commentId: string, content: string) {
