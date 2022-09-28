@@ -28,7 +28,7 @@ export const commentsRepository = {
 
     async getCommentById(id: string) {
         const filter = {id: id}
-        return await commentsCollection.findOne({id}, {projection: {_id: 0}})
+        return await commentsCollection.findOne({id}, {projection: {_id: 0, postId: 0}})
     },
 
     async countComments(postId: string) {
