@@ -1,6 +1,7 @@
 import {commentsCollection} from "../db/db";
 import {ObjectId} from "mongodb";
 import {commentsType} from "../types/comments-type";
+import {SortDirectionEnum} from "../enums/enums";
 
 export const commentsRepository = {
     async createComment(newComment: commentsType) {
@@ -8,12 +9,11 @@ export const commentsRepository = {
         // return await commentsCollection.insertOne(newComment)
     },
 
-    async getCommentsByPostId(postId: string, pageNumber: number, pageSize: number, sortBy: string) {
-        console.log(sortBy)
+    async getCommentsByPostId(postId: string, pageNumber: number, pageSize: number, sortBy: string, sortDirection: SortDirectionEnum) {
         return await commentsCollection.find({postId: postId})
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
-            .sort(sortBy)
+            .sort(sortBy, sortDirection)
             .map(comment => {
                 return {
                     id: comment.id,

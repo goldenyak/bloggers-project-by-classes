@@ -4,6 +4,7 @@ import {ObjectId} from "mongodb";
 import {User} from "../types/user-type";
 import {likesRepository} from "../repositories/likes-repository";
 import {LikesType} from "../types/likes-types";
+import {SortDirectionEnum} from "../enums/enums";
 
 export const commentsServices = {
 
@@ -11,10 +12,10 @@ export const commentsServices = {
         return await commentsRepository.getCommentById(id)
     },
 
-    async getCommentsByPostId(postId: string, pageNumber: number, pageSize: number, sortBy: string) {
+    async getCommentsByPostId(postId: string, pageNumber: number, pageSize: number, sortBy: string, sortDirection: SortDirectionEnum) {
         const commentCount = await commentsRepository.countComments(postId)
         const pagesCount = Math.ceil(commentCount / pageSize)
-        const commentsByPostId = await commentsRepository.getCommentsByPostId(postId, pageNumber, pageSize, sortBy)
+        const commentsByPostId = await commentsRepository.getCommentsByPostId(postId, pageNumber, pageSize, sortBy, sortDirection)
 
         return {
             "pagesCount": pagesCount,
