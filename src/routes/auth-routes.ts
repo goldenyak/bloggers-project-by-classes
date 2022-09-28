@@ -109,15 +109,12 @@ authRouter.post('/registration-confirmation',
 authRouter.post('/registration-email-resending',
     isNotSpam('resend', 10, 5),
     body('email').normalizeEmail().isEmail(),
-    // body('email').custom(async value => {
-    //     const user = await userServices.getUserByEmail(value)
-    //     if (!user ) {
-    //         return Promise.reject();
-    //     }
-    //     if(user.emailConfirmation.isConfirmed) {
-    //         return Promise.reject();
-    //     }
-    // }),
+    body('email').custom(async value => {
+        const user = await userServices.getUserByEmail(value)
+        if (!user ) {return Promise.reject()}
+        if(!user.accountData.email) { return Promise.reject()}
+        if(user.emailConfirmation.isConfirmed) {return Promise.reject()}
+    }),
     async (req: Request, res: Response) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {

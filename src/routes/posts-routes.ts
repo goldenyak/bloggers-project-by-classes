@@ -111,7 +111,8 @@ postsRouter.get('/:postId/comments',
         const pageSize = req.query.pageSize ? Number(req.query.pageSize) : 10
         const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
         // const sortDirection = req.query.sortDirection ? req.query.sortDirection.toString() : "desc"
-        const sortDirection: SortDirectionEnum = "asc"
+        // const sortDirection: SortDirectionEnum = req.query.sortDirection ? req.query.sortDirection : "desc"
+        const sortDirection: SortDirectionEnum = "desc"
 
         res.status(200)
             .send(await commentsServices.getCommentsByPostId(req.params.postId, pageNumber, pageSize, sortBy, sortDirection))
