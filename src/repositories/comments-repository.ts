@@ -39,7 +39,7 @@ export const commentsRepository = {
         return await commentsCollection.deleteOne({id: commentId})
     },
 
-    async updateCommentById(id: ObjectId, content: string) {
-        return await commentsCollection.updateOne({_id: id}, {$set: {content: content}})
+    async updateCommentById(commentId: string, content: string) {
+        return await commentsCollection.updateOne({id: commentId}, {$set: {content: content}})
     }
 }

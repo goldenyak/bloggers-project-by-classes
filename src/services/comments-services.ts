@@ -49,7 +49,7 @@ export const commentsServices = {
     },
 
     async updateCommentById(commentId: string, content: string) {
-        return await commentsRepository.updateCommentById(new ObjectId(commentId), content)
+        return await commentsRepository.updateCommentById(commentId, content)
     },
 
     async deleteComment(commentId: string) {
