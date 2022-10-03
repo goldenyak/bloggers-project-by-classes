@@ -9,7 +9,6 @@ import {contentValidation} from "../validation/posts/content-validation";
 import {inputValidation} from "../validation/errors/input-validation";
 import {postsServices} from "../services/posts-services";
 import {commentsServices} from "../services/comments-services";
-import {SortDirectionEnum} from "../enums/enums";
 
 export const postsRouter = Router({})
 
@@ -110,11 +109,7 @@ postsRouter.get('/:postId/comments',
         const pageNumber = req.query.pageNumber ? Number(req.query.pageNumber) : 1
         const pageSize = req.query.pageSize ? Number(req.query.pageSize) : 10
         const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
-        // const sortDirection = req.query.sortDirection ? req.query.sortDirection.toString() : "desc"
         const sortDirection = req.query.sortDirection === 'asc' ? 'asc' : 'desc'
-
-        // const sortDirection = req.query.sortDirection ? req.query.sortDirection : "desc"
-        // const sortDirection: SortDirectionEnum = "asc"
 
         res.status(200)
             .send(await commentsServices.getCommentsByPostId(req.params.postId, pageNumber, pageSize, sortBy, sortDirection))

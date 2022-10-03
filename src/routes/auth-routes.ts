@@ -113,7 +113,7 @@ authRouter.post('/registration-email-resending',
         const user = await userServices.getUserByEmail(value)
         // if(!user || user && user.emailConfirmation.isConfirmed) {
         //     {return Promise.reject()
-        // }
+        // },
         if (!user ) {return Promise.reject()}
         if(!user.accountData.email) { return Promise.reject()}
         if(user.emailConfirmation.isConfirmed) {return Promise.reject()}

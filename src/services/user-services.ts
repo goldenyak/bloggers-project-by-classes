@@ -50,7 +50,9 @@ export class UserServices {
         if (user) {
             return {
                 id: user._id,
-                login: user.accountData.userName
+                login: user.accountData.userName,
+                email: user.accountData.email,
+                createdAt: user.accountData.createdAt
             }
         } else return null
     }
